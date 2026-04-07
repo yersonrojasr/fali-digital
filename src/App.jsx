@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { invitationConfig } from './config/invitationConfig';
 import { themeConfig } from './Components/themeConfig';
