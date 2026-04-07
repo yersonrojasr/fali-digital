@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+/* Tus fuentes de Google */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500;700&family=Dancing+Script:wght@700&family=Delius&family=Cinzel:wght@400;700&family=Lora:ital,wght@0,400;1,400&family=Patrick+Hand&display=swap');
+
+/* Clases de fuentes para que la IA las use */
+@layer components {
+  .font-safari { font-family: 'Quicksand', sans-serif; }
+  .font-cursive { font-family: 'Dancing Script', cursive; }
+  .font-baby { font-family: 'Delius', cursive; }
+  .font-minimal-title { font-family: 'Cinzel', serif; }
+  .font-minimal-body { font-family: 'Lora', serif; }
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  /* Quitamos el flex-center que traía Vite para que la invitación fluya hacia abajo */
+  display: block; 
+}
