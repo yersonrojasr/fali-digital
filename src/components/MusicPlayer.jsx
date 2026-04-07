@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Music, Music2 } from 'lucide-react';
 
 const MusicPlayer = ({ audioRef, theme }) => {

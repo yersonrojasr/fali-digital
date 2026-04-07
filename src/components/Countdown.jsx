@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Compass } from 'lucide-react'; // Importamos la Brújula
 
 const Countdown = ({ targetDate, theme }) => {

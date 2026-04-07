@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Send, CheckCircle, Gift, Calendar, Bell, ExternalLink } from 'lucide-react';
 import { invitationConfig } from '../config/invitationConfig';
 

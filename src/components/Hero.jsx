@@ -1,4 +1,3 @@
-import React from 'react';
 import { invitationConfig } from '../config/invitationConfig'; 
 import FadeIn from './FadeIn';
 import fotoPortada from '../assets/Olivia.PNG'; 

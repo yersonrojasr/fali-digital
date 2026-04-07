@@ -1,4 +1,3 @@
-import React from 'react';
 import { motion } from "framer-motion";
 // 1. IMPORTAMOS EL CEREBRO
 import { invitationConfig } from '../config/invitationConfig'; 

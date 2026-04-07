@@ -1,4 +1,3 @@
-import React from 'react';
 import { MapPin, ExternalLink, Compass } from 'lucide-react'; // Importamos Compass
 import { invitationConfig } from '../config/invitationConfig'; 
 
