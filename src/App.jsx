@@ -4,13 +4,12 @@ import { invitationConfig } from './config/invitationConfig';
 import { themeConfig } from './Components/themeConfig';
 
 // Componentes
-import Hero from './Components/Hero';
-import Countdown from './Components/Countdown';
-import MusicPlayer from './Components/MusicPlayer';
-import Gallery from './Components/Gallery';
-import Location from './Components/Location';
-import RSVPForm from './Components/RSVPForm';
-import FadeIn from './Components/FadeIn';
+import Hero from './components/Hero';
+import Countdown from './components/Countdown';
+import MusicPlayer from './components/MusicPlayer';
+import Gallery from './components/Gallery';
+import Location from './components/Location';
+import RSVPForm from './components/RSVPForm';
 
 function App() {
   const [currentTheme, setCurrentTheme] = useState(null);
