@@ -1,11 +1,9 @@
 import { motion } from "framer-motion";
-// 1. IMPORTAMOS EL CEREBRO
-import { invitationConfig } from '../config/invitationConfig'; 
+// 1. IMPORTAMOS LAS IMÁGENES DIRECTAMENTE (El "Seguro de Vida")
+import imgPaleta from '../assets/Paleta.JPG'; 
+import imgFlores from '../assets/flores-paleta.JPG'; 
 
 const Gallery = ({ theme }) => {
-  // 2. EXTRAEMOS LAS IMÁGENES
-  const { images } = invitationConfig;
-
   return (
     <section className="py-12 px-4 overflow-hidden">
       <motion.h3 
@@ -25,9 +23,9 @@ const Gallery = ({ theme }) => {
           viewport={{ once: true }}
           transition={{ duration: 1, type: "spring", bounce: 0.4 }}
         >
-          {/* 3. USAMOS LA VARIABLE DE LA CONFIGURACIÓN */}
+          {/* 2. USAMOS LA VARIABLE IMPORTADA, NO LA RUTA DE TEXTO */}
           <img 
-            src={`/src/assets/${images.paleta}`} 
+            src={imgPaleta} 
             alt="Paleta de Colores" 
             className="w-48 h-auto rounded-2xl shadow-xl border-4 border-white" 
           />
@@ -40,7 +38,7 @@ const Gallery = ({ theme }) => {
           transition={{ duration: 1, type: "spring", bounce: 0.4, delay: 0.2 }}
         >
           <img 
-            src={`/src/assets/${images.flores}`} 
+            src={imgFlores} 
             alt="Detalles" 
             className="w-48 h-auto rounded-2xl shadow-xl border-4 border-white" 
           />
