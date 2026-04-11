@@ -1,9 +1,8 @@
 import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { invitationConfig } from './config/invitationConfig';
-import { themeConfig } from './Components/themeConfig';
+import { themeConfig } from './components/themeConfig';
 
-// Componentes
 import Hero from './components/Hero';
 import Countdown from './components/Countdown';
 import MusicPlayer from './components/MusicPlayer';
@@ -11,6 +10,7 @@ import Gallery from './components/Gallery';
 import Location from './components/Location';
 import RSVPForm from './components/RSVPForm';
 import PhotoCarousel from './components/PhotoCarousel';
+import Footer from './components/Footer';
 
 function App() {
   const [currentTheme, setCurrentTheme] = useState(invitationConfig.isProduction ? invitationConfig.defaultTheme : null);
@@ -29,11 +29,9 @@ function App() {
   return (
     <div className={`min-h-screen transition-all duration-700 ${theme ? theme.container : 'bg-gray-50'}`}>
       
-      {/* Audio oculto */}
       <audio ref={audioRef} src="/cancion.mp3" loop />
 
       <AnimatePresence mode="wait">
-        {/* 1. CATÁLOGO */}
         {!currentTheme && (
           <motion.div 
             key="catalog" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
@@ -60,7 +58,6 @@ function App() {
           </motion.div>
         )}
 
-        {/* 2. PANTALLA DE BIENVENIDA */}
         {currentTheme && !hasStarted && (
           <motion.div 
             key="welcome" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, scale: 1.1 }}
@@ -76,7 +73,6 @@ function App() {
           </motion.div>
         )}
 
-        {/* 3. INVITACIÓN FINAL (RESPONSIVA Y CENTRADA) */}
         {currentTheme && hasStarted && (
           <motion.div key="invitation" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="w-full">
             <button 
@@ -86,17 +82,13 @@ function App() {
               ← CATÁLOGO
             </button>
 
-            {/* Contenedor Maestro: En Mac md:max-w-5xl, centrado con mx-auto */}
-            <div className="w-full md:max-w-5xl mx-auto flex flex-col items-center pb-24 bg-white min-h-screen shadow-2xl overflow-x-hidden">
+            <div className="w-full md:max-w-5xl mx-auto flex flex-col items-center bg-white shadow-2xl overflow-x-hidden relative">
               
               <Hero theme={theme} />
               
-              {/* Contenedor de Contenido: flex-col e items-center fuerzan el centrado de todos los hijos */}
-              <div className="w-full px-4 md:px-12 flex flex-col items-center space-y-16 text-center mt-12">
-                
+              <div className="w-full px-4 md:px-12 flex flex-col items-center space-y-16 text-center mt-12 pb-12">
                 <Countdown targetDate={invitationConfig.event.date} theme={theme} />
                 
-                {/* Dividimos Gallery y Location pero ambos heredan el centrado del padre */}
                 <div className="w-full flex flex-col items-center space-y-16">
                   <Gallery theme={theme} />
                   <Location theme={theme} />
@@ -104,6 +96,8 @@ function App() {
                 <PhotoCarousel theme={theme} />
                 <RSVPForm theme={theme} />
               </div>
+
+              <Footer theme={theme} />
             </div>
             
             <MusicPlayer audioRef={audioRef} theme={theme} />

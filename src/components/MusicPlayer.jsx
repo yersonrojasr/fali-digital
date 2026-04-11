@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Music, Music2 } from 'lucide-react';
 
 const MusicPlayer = ({ audioRef, theme }) => {
   const [isPlaying, setIsPlaying] = useState(true);
@@ -14,17 +13,17 @@ const MusicPlayer = ({ audioRef, theme }) => {
   };
 
   return (
-    <button 
-      onClick={toggleMusic}
-      className={`fixed bottom-6 right-6 z-100 p-4 rounded-full shadow-2xl transition-all active:scale-90
-      ${theme.card} border-2 ${isPlaying ? 'animate-pulse' : 'opacity-50'}`}
-    >
-      {isPlaying ? (
-        <Music className={theme.accent} size={24} />
-      ) : (
-        <Music2 className="text-gray-400" size={24} />
-      )}
-    </button>
+    <div className="fixed bottom-6 right-6 z-[300]">
+      <button 
+        onClick={toggleMusic}
+        className={`flex items-center justify-center w-14 h-14 rounded-full shadow-2xl transition-all active:scale-90 border-2
+        ${theme.card} ${isPlaying ? 'animate-pulse' : 'opacity-80'}`}
+      >
+        <span className="text-2xl select-none">
+          {isPlaying ? '🎵' : '🔇'}
+        </span>
+      </button>
+    </div>
   );
 };
 

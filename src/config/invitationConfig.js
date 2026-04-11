@@ -9,7 +9,7 @@ export const invitationConfig = {
   // 2. DATOS DEL EVENTO (SOPORTE PARA MÚLTIPLES UBICACIONES)
   // -------------------------------------------------------------------------
   event: {
-    babyName: "Nombre del Bebé",
+    babyName: "Tu evento",
     date: "2026-10-04T11:00:00", 
     calendarTitle: "Agendar Evento",
     giftTitle: "Lista de Regalos",
@@ -21,26 +21,23 @@ export const invitationConfig = {
   // Nueva estructura de ubicaciones (Etapa 2)
   locations: [
     {
-      name: "Ceremonia",
-      time: "11:00 AM",
-      locationName: "Parroquia Inmaculada Concepción",
+      name: "Dirección 1",
+      time: "Hora del evento",
+      locationName: "Tu localización",
       url: "https://www.google.com/maps/embed?pb=...", // El src del iframe
       googleMapsLink: "https://maps.app.goo.gl/...",
       wazeLink: "https://waze.com/ul/..."
     },
     {
-      name: "Recepción",
-      time: "01:00 PM",
-      locationName: "Salón de Eventos El Puerto",
-      url: "https://www.google.com/maps/embed?pb=...", 
+      name: "Dirección 2",
+      time: "Hora del evento",
+      locationName: "Tu segunda localización",
+      url: "https://www.google.com/maps/embed?pb=...",
       googleMapsLink: "https://maps.app.goo.gl/...",
       wazeLink: "https://waze.com/ul/..."
     }
   ],
 
-  // -------------------------------------------------------------------------
-  // 3. ARCHIVOS MULTIMEDIA (CORREGIDOS PARA VERCEL)
-  // -------------------------------------------------------------------------
   images: {
     hero: "Olivia.PNG",
     paleta: "Paleta.JPG",
