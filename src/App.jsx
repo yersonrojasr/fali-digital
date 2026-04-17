@@ -35,17 +35,14 @@ function App() {
   };
 
   return (
-    // He añadido un fondo dinámico: si es pastel o babyshower, ponemos un celeste cielo muy suave
-    <div className={`min-h-screen transition-all duration-700 relative overflow-x-hidden
-      ${theme ? theme.container : 'bg-gray-50'}
-      ${(currentTheme === 'pastel' || currentTheme === 'babyshower') ? 'bg-linear-to-b from-[#E0F2FE] to-[#fff5f8]' : ''}
-    `}>
+    // VOLVEMOS AL ORIGEN: El fondo lo dicta estrictamente el themeConfig
+    <div className={`min-h-screen transition-all duration-700 relative overflow-x-hidden ${theme ? theme.container : 'bg-gray-50'}`}>
       
       <audio ref={audioRef} src="/cancion.mp3" loop />
 
       <AnimatePresence mode="wait">
         
-        {/* VISTA 1: CATÁLOGO */}
+        {/* VISTA: CATÁLOGO */}
         {!currentTheme && (
           <motion.div 
             key="catalog" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
@@ -68,7 +65,7 @@ function App() {
           </motion.div>
         )}
 
-        {/* VISTA 2: BIENVENIDA (MODAL DE ENTRADA) */}
+        {/* VISTA: BIENVENIDA */}
         {currentTheme && !hasStarted && (
           <motion.div 
             key="welcome" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, scale: 1.1 }}
@@ -83,10 +80,9 @@ function App() {
           </motion.div>
         )}
 
-        {/* VISTA 3: CUERPO DE LA INVITACIÓN */}
+        {/* VISTA: CUERPO */}
         {currentTheme && hasStarted && (
           <motion.div key="invitation" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="w-full relative z-20">
-            
             <button 
               onClick={() => {setCurrentTheme(null); setHasStarted(false);}} 
               className="fixed top-6 left-6 z-100 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full text-[10px] font-bold shadow-lg border border-gray-200"
@@ -94,8 +90,9 @@ function App() {
               ← CATÁLOGO
             </button>
 
-            {/* CONTENEDOR CENTRAL: He bajado la opacidad (bg-white/20) para que las nubes se vean a través */}
-            <div className="w-full md:max-w-5xl mx-auto flex flex-col items-center shadow-2xl overflow-x-hidden relative z-30 bg-white/20 backdrop-blur-md border-x border-white/30">
+            {/* Ajustamos la opacidad para que Pastel se vea sólido y BabyShower deje pasar las nubes */}
+            <div className={`w-full md:max-w-5xl mx-auto flex flex-col items-center shadow-2xl overflow-x-hidden relative z-30 
+              ${currentTheme === 'babyshower' ? 'bg-white/30 backdrop-blur-md' : 'bg-white/80'}`}>
               <Hero theme={theme} />
               <div className="w-full px-4 md:px-12 flex flex-col items-center space-y-16 text-center mt-12 pb-12">
                 <Countdown targetDate={invitationConfig.event.date} theme={theme} />
@@ -112,15 +109,9 @@ function App() {
         )}
       </AnimatePresence>
 
-      {/* 
-        CAPA DE EFECTOS: 
-        La pongo fuera de AnimatePresence y al final para asegurar que 
-        el z-index [50] esté por encima de la invitación pero no tape el catálogo 
-      */}
+      {/* Los efectos se cargan aquí al final */}
       {currentTheme && hasStarted && (
-        <div className="fixed inset-0 pointer-events-none z-45">
-            <VisualEffects themeId={currentTheme} />
-        </div>
+        <VisualEffects themeId={currentTheme} />
       )}
     </div>
   );
