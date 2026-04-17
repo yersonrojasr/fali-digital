@@ -1,5 +1,5 @@
 import { invitationConfig } from '../config/invitationConfig'; 
-import FadeIn from './FadeIn';
+import FadeIn from './Fadein';
 import fotoPortada from '../assets/Olivia.PNG'; 
 import { Send } from 'lucide-react'; 
 
