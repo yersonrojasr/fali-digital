@@ -11,6 +11,14 @@ import Location from './components/Location';
 import RSVPForm from './components/RSVPForm';
 import PhotoCarousel from './components/PhotoCarousel';
 import Footer from './components/Footer';
+import VisualEffects from './components/VisualEffects';
+
+const THEME_ICONS = {
+  safari: '🦁', pastel: '🌸', minimalista: '✨', boho: '🌿',
+  deepNight: '🌌', royalGold: '👑', cleanModern: '🔳', ocean: '🌊',
+  vintage: '📜', lavender: '🪻', traveler: '✈️', garden: '🌼',
+  wedding: '💍', birthday: '🎂', babyshower: '🍼'
+};
 
 function App() {
   const [currentTheme, setCurrentTheme] = useState(invitationConfig.isProduction ? invitationConfig.defaultTheme : null);
@@ -27,15 +35,21 @@ function App() {
   };
 
   return (
-    <div className={`min-h-screen transition-all duration-700 ${theme ? theme.container : 'bg-gray-50'}`}>
+    // He añadido un fondo dinámico: si es pastel o babyshower, ponemos un celeste cielo muy suave
+    <div className={`min-h-screen transition-all duration-700 relative overflow-x-hidden
+      ${theme ? theme.container : 'bg-gray-50'}
+      ${(currentTheme === 'pastel' || currentTheme === 'babyshower') ? 'bg-linear-to-b from-[#E0F2FE] to-[#fff5f8]' : ''}
+    `}>
       
       <audio ref={audioRef} src="/cancion.mp3" loop />
 
       <AnimatePresence mode="wait">
+        
+        {/* VISTA 1: CATÁLOGO */}
         {!currentTheme && (
           <motion.div 
             key="catalog" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="min-h-screen flex flex-col items-center p-6 text-center"
+            className="min-h-screen flex flex-col items-center p-6 text-center relative z-100"
           >
             <h1 className="text-3xl md:text-4xl font-light my-12 text-gray-800 tracking-[0.2em] uppercase">Nuestros Diseños</h1>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 w-full max-w-6xl pb-12">
@@ -45,58 +59,51 @@ function App() {
                   className="cursor-pointer bg-white p-6 rounded-[2.5rem] shadow-xl border border-gray-100 flex flex-col items-center group"
                 >
                   <div className={`w-24 h-24 rounded-full mb-4 flex items-center justify-center text-4xl shadow-inner transition-transform group-hover:rotate-12 ${themeConfig[t].container}`}>
-                    {t === 'safari' && '🦁'} {t === 'pastel' && '🌸'} {t === 'minimalista' && '✨'}
-                    {t === 'boho' && '🌿'} {t === 'deepNight' && '🌌'} {t === 'royalGold' && '👑'}
-                    {t === 'cleanModern' && '🔳'} {t === 'ocean' && '🌊'} {t === 'vintage' && '📜'}
-                    {t === 'lavender' && '🪻'} {t === 'traveler' && '✈️'} {t === 'garden' && '🌼'}
+                    {THEME_ICONS[t] || '✨'}
                   </div>
                   <h3 className="text-xl font-bold capitalize text-gray-800">{t}</h3>
-                  <span className="text-[10px] mt-2 opacity-40 font-black tracking-widest uppercase italic">Tocar para ver</span>
                 </motion.div>
               ))}
             </div>
           </motion.div>
         )}
 
+        {/* VISTA 2: BIENVENIDA (MODAL DE ENTRADA) */}
         {currentTheme && !hasStarted && (
           <motion.div 
             key="welcome" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, scale: 1.1 }}
             className="fixed inset-0 z-200 flex items-center justify-center p-6 bg-white/90 backdrop-blur-md"
           >
             <div className={`${theme.card} p-12 text-center shadow-2xl flex flex-col items-center max-w-sm`}>
-              <h2 className={`${theme.title} text-2xl mb-8`}>Has sido invitado</h2>
-              <button onClick={handleStart} className={`${theme.button} px-10 py-6 flex flex-col items-center gap-1`}>
-                <span className="text-lg font-bold uppercase">Abrir Invitación</span>
-                <span className="text-[9px] opacity-70 tracking-[0.2em]">Y ACTIVAR MÚSICA</span>
+              <h2 className={`${theme.title} text-2xl mb-8 uppercase`}>Has sido invitado</h2>
+              <button onClick={handleStart} className={`${theme.button} px-10 py-6 rounded-2xl`}>
+                <span className="text-lg font-bold uppercase tracking-tighter">Abrir Invitación</span>
               </button>
             </div>
           </motion.div>
         )}
 
+        {/* VISTA 3: CUERPO DE LA INVITACIÓN */}
         {currentTheme && hasStarted && (
-          <motion.div key="invitation" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="w-full">
+          <motion.div key="invitation" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="w-full relative z-20">
+            
             <button 
               onClick={() => {setCurrentTheme(null); setHasStarted(false);}} 
-              className="fixed top-6 left-6 z-100 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full text-[10px] font-bold shadow-lg border border-gray-200 hover:bg-white transition-colors"
+              className="fixed top-6 left-6 z-100 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full text-[10px] font-bold shadow-lg border border-gray-200"
             >
               ← CATÁLOGO
             </button>
 
-            <div className="w-full md:max-w-5xl mx-auto flex flex-col items-center bg-white shadow-2xl overflow-x-hidden relative">
-              
+            {/* CONTENEDOR CENTRAL: He bajado la opacidad (bg-white/20) para que las nubes se vean a través */}
+            <div className="w-full md:max-w-5xl mx-auto flex flex-col items-center shadow-2xl overflow-x-hidden relative z-30 bg-white/20 backdrop-blur-md border-x border-white/30">
               <Hero theme={theme} />
-              
               <div className="w-full px-4 md:px-12 flex flex-col items-center space-y-16 text-center mt-12 pb-12">
                 <Countdown targetDate={invitationConfig.event.date} theme={theme} />
-                
-                <div className="w-full flex flex-col items-center space-y-16">
-                  <Gallery theme={theme} />
-                  <Location theme={theme} />
-                </div>
+                <Location theme={theme} />
+                <Gallery theme={theme} />
                 <PhotoCarousel theme={theme} />
                 <RSVPForm theme={theme} />
               </div>
-
               <Footer theme={theme} />
             </div>
             
@@ -104,6 +111,17 @@ function App() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* 
+        CAPA DE EFECTOS: 
+        La pongo fuera de AnimatePresence y al final para asegurar que 
+        el z-index [50] esté por encima de la invitación pero no tape el catálogo 
+      */}
+      {currentTheme && hasStarted && (
+        <div className="fixed inset-0 pointer-events-none z-45">
+            <VisualEffects themeId={currentTheme} />
+        </div>
+      )}
     </div>
   );
 }

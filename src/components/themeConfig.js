@@ -115,4 +115,29 @@ export const themeConfig = {
     button: 'bg-[#2D5A27] hover:bg-[#1E3A1A] text-white px-8 py-3 rounded-full transition-all shadow-lg font-serif italic',
     divider: 'border-[#2D5A27]/20 w-32'
   },
+  
+  wedding: {
+    id: 'wedding',
+    container: 'bg-[#FCF9F5]',
+    card: 'bg-white/80 backdrop-blur-md border border-[#E5DACE]',
+    title: 'font-serif text-[#4A4238] tracking-[0.2em]',
+    accent: 'text-[#C5A27D]',
+    button: 'bg-[#4A4238] text-white hover:bg-[#5D5347]',
+  },
+ birthday: {
+    id: 'birthday',
+    container: 'bg-white', // Cambiado a blanco para que se vean los títulos
+    card: 'bg-slate-50 border-2 border-yellow-200 rounded-[2.5rem]',
+    title: 'font-sans font-bold text-slate-800 uppercase tracking-widest', // Títulos visibles
+    accent: 'text-yellow-500',
+    button: 'bg-yellow-400 text-slate-900 hover:bg-yellow-500 rounded-xl px-8 py-4',
+  },
+  babyshower: {
+    id: 'babyshower',
+    container: 'bg-[#F0F7FF]',
+    card: 'bg-white/90 backdrop-blur-sm border border-[#D1E9FF]',
+    title: 'font-medium text-[#5D8EB5] tracking-wide',
+    accent: 'text-[#A5CAD2]',
+    button: 'bg-[#A5CAD2] text-white hover:bg-[#B8DCE3]',
+  }
 };
