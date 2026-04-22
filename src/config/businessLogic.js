@@ -7,7 +7,7 @@ export const businessConfig = {
   plans: {
     autor: { price: "Inversión: $35" },
     personalizado: { 
-      price: "Desde $80", // Inversión inicial para proyectos únicos
+      price: "Desde $70", // Inversión inicial para proyectos únicos
       whatsappMessage: "¡Hola! Me gustaría consultar por un diseño 100% personalizado para mi evento."
     }
   },
