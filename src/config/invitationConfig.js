@@ -3,6 +3,7 @@ export const invitationConfig = {
   // 1. CONFIGURACIÓN DE ESTADO (EL SWITCH)
   // -------------------------------------------------------------------------
   isProduction: false, 
+  planType: 'personalizado', // <--- AGREGAR ESTO: 'basico' o 'personalizado'
   defaultTheme: "traveler", 
 
   // -------------------------------------------------------------------------
@@ -41,7 +42,7 @@ export const invitationConfig = {
   images: {
     hero: "Olivia.PNG",
     paleta: "Paleta.JPG",
-    flores: "flores-paleta.PNG", // Corregido a .PNG para que coincida con tu carpeta
+    flores: "flores-paleta.PNG", 
   },
   
   music: "cancion.mp3"
