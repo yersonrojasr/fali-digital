@@ -4,39 +4,38 @@ import { MapPin, Clock, ExternalLink } from 'lucide-react';
 const Location = ({ theme, locations }) => {
   if (!locations || locations.length === 0) return null;
 
+  // EXPLICACIÓN SENIOR:
+  // Algunos temas tienen p-10 o p-12 que asfixian el mapa en móvil.
+  // Esta regex elimina cualquier clase de padding (p-, px-, py-) para que el mapa respire.
+  const cardStyleClean = theme.card
+    .replace(/\bp-\d+\b/g, '')
+    .replace(/\bpx-\d+\b/g, '')
+    .replace(/\bpy-\d+\b/g, '');
+
   const borderColor = theme.divider?.split(' ')[1] || 'border-stone-100';
 
   return (
-    <section className="w-full space-y-16 px-4 md:px-0"> 
-      {/* 
-        px-4 en el contenedor de la sección asegura que nada, 
-        ni el texto ni el mapa, toque los bordes del celular.
-      */}
+    <section className="w-full space-y-16 px-4 md:px-0">
       {locations.map((loc, index) => (
         <div key={index} className="flex flex-col items-center w-full">
           
-          {/* Encabezado */}
           <div className="text-center mb-8">
             <div className="flex items-center justify-center gap-3 mb-4">
                <MapPin className={theme.accent} size={24} />
             </div>
-            
-            <h2 className={`${theme.title} text-2xl md:text-3xl mb-2`}>{loc.name}</h2>
-            
+            <h2 className={`${theme.title} text-2xl md:text-3xl mb-2 px-2`}>{loc.name}</h2>
             <div className="flex items-center justify-center gap-2 mb-1 opacity-80">
               <Clock size={14} className={theme.accent} />
               <span className="text-[11px] font-bold uppercase tracking-widest">{loc.time}</span>
             </div>
-            
             <p className="opacity-70 italic text-sm">{loc.locationName}</p>
           </div>
 
           {/* 
-            CUADRO DEL MAPA (Ajuste de ancho):
-            w-full: toma el ancho permitido por el px-4 del padre.
-            max-w-2xl: evita que en tablets o laptops se haga gigante.
+             Aplicamos cardStyleClean para mantener el estilo del tema (bordes, fondo)
+             pero sin el padding que lo hacía estrecho.
           */}
-          <div className={`w-full max-w-2xl overflow-hidden shadow-xl ${theme.card} border-4 border-white p-0 mx-auto`}>
+          <div className={`w-full max-w-2xl overflow-hidden shadow-xl ${cardStyleClean} border-4 border-white p-0 mx-auto`}>
             <div className="relative w-full h-[280px] md:h-[350px]">
               <iframe
                 src={loc.url}
@@ -48,7 +47,6 @@ const Location = ({ theme, locations }) => {
               />
             </div>
 
-            {/* Botones de acción */}
             <div className={`flex divide-x divide-stone-100 border-t ${borderColor}`}>
               <a 
                 href={loc.googleMapsLink} 
