@@ -24,7 +24,6 @@ const THEME_ICONS = {
 };
 
 function App() {
-  // --- ESTADO ---
   const [viewMode, setViewMode] = useState(invitationConfig.isProduction ? 'invitation' : 'home');
   const [currentTheme, setCurrentTheme] = useState(invitationConfig.isProduction ? invitationConfig.defaultTheme : null);
   const [hasStarted, setHasStarted] = useState(false);
@@ -32,12 +31,10 @@ function App() {
   
   const audioRef = useRef(null);
 
-  // --- MEMOIZACIÓN ---
   const theme = useMemo(() => currentTheme ? themeConfig[currentTheme] : null, [currentTheme]);
   const isPremium = invitationConfig.planType === 'personalizado';
   const eventName = invitationConfig.event.babyName || "Tu Evento";
 
-  // --- EFECTOS ---
   useEffect(() => { window.scrollTo(0, 0); }, [viewMode, currentTheme]);
 
   useEffect(() => {
@@ -45,7 +42,6 @@ function App() {
     setGuestInfo({ pases: params.get('p'), name: params.get('n') });
   }, []);
 
-  // --- MANEJADORES ---
   const stopMusic = useCallback(() => {
     if (audioRef.current) {
       audioRef.current.pause();
@@ -82,22 +78,10 @@ function App() {
       <audio ref={audioRef} src={`/${invitationConfig.music}`} loop />
 
       <AnimatePresence mode="wait">
-        
-        {showLanding && viewMode === 'home' && (
-          <LandingView setViewMode={setViewMode} />
-        )}
-
-        {showLanding && viewMode === 'info-autor' && (
-          <InfoAutorView onBack={() => navigateTo('home')} onCatalog={() => navigateTo('catalog')} />
-        )}
-
-        {showLanding && viewMode === 'info-personalizado' && (
-          <InfoPersonalizadoView onBack={() => navigateTo('home')} />
-        )}
-
-        {showLanding && viewMode === 'catalog' && (
-          <CatalogView onBack={() => navigateTo('info-autor')} onSelect={setCurrentTheme} />
-        )}
+        {showLanding && viewMode === 'home' && <LandingView setViewMode={setViewMode} />}
+        {showLanding && viewMode === 'info-autor' && <InfoAutorView onBack={() => navigateTo('home')} onCatalog={() => navigateTo('catalog')} />}
+        {showLanding && viewMode === 'info-personalizado' && <InfoPersonalizadoView onBack={() => navigateTo('home')} />}
+        {showLanding && viewMode === 'catalog' && <CatalogView onBack={() => navigateTo('info-autor')} onSelect={setCurrentTheme} />}
 
         {currentTheme && !hasStarted && (
           <EnvelopeView 
@@ -117,18 +101,53 @@ function App() {
             isPremium={isPremium}
             onBack={resetToCatalog}
             audioRef={audioRef}
-            // Restauramos el link de WhatsApp
             whatsappSelectionLink={getWhatsAppLink(`¡Hola Fali! Me encantó el diseño "${currentTheme}". Quiero este para mi evento.`)}
           />
         )}
-
       </AnimatePresence>
     </div>
   );
 }
 
-// --- SUB-COMPONENTES DE VISTA ---
+// --- SUB-VISTAS (Lógica de Limpieza aplicada en InvitationView) ---
 
+const InvitationView = ({ theme, currentTheme, guestInfo, isPremium, onBack, audioRef, whatsappSelectionLink }) => {
+  // LIMPIEZA DE PADDING: Evitamos que el contenedor principal asfixie a los hijos
+  const cleanMainCard = useMemo(() => theme.card
+    .replace(/\bp-\d+\b/g, 'p-0')
+    .replace(/\bpx-\d+\b/g, 'px-0')
+    .replace(/\bpy-\d+\b/g, 'py-0'), [theme.card]);
+
+  return (
+    <div className="w-full flex flex-col items-center">
+      {!invitationConfig.isProduction && (
+        <div className="fixed top-6 left-6 z-[100] flex gap-3">
+          <button onClick={onBack} className="bg-white/90 backdrop-blur-md px-5 py-2 rounded-full text-[10px] font-bold shadow-lg border border-stone-100 uppercase tracking-widest">← Catálogo</button>
+          <a href={whatsappSelectionLink} target="_blank" rel="noreferrer" className="bg-stone-800 text-white px-6 py-2 rounded-full text-[10px] font-bold shadow-lg uppercase tracking-widest hover:bg-stone-700 transition-colors">Elegir este diseño</a>
+        </div>
+      )}
+      
+      <div className={`w-full md:max-w-4xl mx-auto shadow-2xl relative z-10 ${cleanMainCard} md:my-10 overflow-hidden`}>
+        <Hero theme={theme} />
+        
+        {/* Padding controlado centralizado para el contenido */}
+        <div className="w-full px-4 md:px-12 flex flex-col items-center space-y-24 py-24">
+          <Countdown targetDate={invitationConfig.event.date} theme={theme} />
+          <Location theme={theme} locations={invitationConfig.locations} />
+          <Gallery theme={theme} />
+          <PhotoCarousel theme={theme} />
+          <RSVPForm theme={theme} pases={isPremium ? guestInfo.pases : null} guestName={isPremium ? guestInfo.name : null} />
+        </div>
+        
+        <Footer theme={theme} />
+      </div>
+      <MusicPlayer theme={theme} audioRef={audioRef} />
+      <VisualEffects themeId={currentTheme} />
+    </div>
+  );
+};
+
+// Componentes secundarios de navegación
 const LandingView = ({ setViewMode }) => (
   <motion.div key="home" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="min-h-screen flex flex-col items-center justify-center p-8 bg-[#F9F8F6]">
     <div className="max-w-5xl w-full flex flex-col items-center">
@@ -136,7 +155,7 @@ const LandingView = ({ setViewMode }) => (
         <img src="/logosinfondo.png" alt="Logo" className="w-64 md:w-80 mb-6" />
         <p className="text-[10px] uppercase tracking-[0.6em] text-stone-400 font-medium italic">The Art of Virtual Hosting</p>
       </header>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-stretch w-full max-w-4xl">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-stretch w-full max-w-4xl text-stone-800">
         <LandingCard title="Diseños de Autor" tag="Colección 01" desc="Curaduría de estilos listos para personalizar." onClick={() => setViewMode('info-autor')} />
         <LandingCard title="Personalizados" tag="Colección 02" desc="Diseños únicos desde lienzo en blanco." onClick={() => setViewMode('info-personalizado')} dark />
       </div>
@@ -145,7 +164,7 @@ const LandingView = ({ setViewMode }) => (
 );
 
 const LandingCard = ({ title, tag, desc, onClick, dark }) => (
-  <div className="flex flex-col justify-between border-t border-stone-200 pt-8">
+  <div className="flex flex-col justify-between border-t border-stone-200 pt-8 text-stone-800">
     <div>
       <span className="text-[10px] uppercase tracking-widest text-stone-400 mb-4 block font-bold">{tag}</span>
       <h2 className="text-3xl font-serif italic mb-6">{title}</h2>
@@ -160,7 +179,7 @@ const LandingCard = ({ title, tag, desc, onClick, dark }) => (
 const InfoAutorView = ({ onBack, onCatalog }) => (
   <motion.div key="info-autor" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="min-h-screen bg-white py-20 px-6">
     <div className="max-w-4xl mx-auto text-stone-800">
-      <button onClick={onBack} className="mb-12 text-stone-400 text-[10px] font-bold uppercase tracking-widest">← Volver</button>
+      <button onClick={onBack} className="mb-12 text-stone-400 text-[10px] font-bold uppercase tracking-widest hover:text-stone-800 transition-colors">← Volver</button>
       <header className="mb-12">
         <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-stone-400 block mb-4">Autor Collection</span>
         <h1 className="text-5xl font-serif italic mb-6">Elegancia Inmediata</h1>
@@ -170,23 +189,23 @@ const InfoAutorView = ({ onBack, onCatalog }) => (
         {businessConfig.rules.autor.ventajas.map((v, i) => (
           <div key={i} className="border border-stone-100 p-8 rounded-3xl bg-[#F9F8F6]">
             <h4 className="font-bold mb-2 uppercase text-[10px] tracking-widest">{v.title}</h4>
-            <p className="text-sm text-stone-500">{v.desc}</p>
+            <p className="text-sm text-stone-500 leading-snug">{v.desc}</p>
           </div>
         ))}
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-20 items-start">
-        <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start mb-20">
+        <div className="space-y-6 text-left">
           <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-stone-400 border-b pb-2">Características Incluidas</h3>
           <ul className="space-y-4">
             {businessConfig.rules.autor.features.map((f, i) => (
-              <li key={i} className="flex items-center gap-3 text-sm text-stone-600"><div className="w-1.5 h-1.5 bg-stone-800 rounded-full" />{f}</li>
+              <li key={i} className="flex items-center gap-3 text-sm text-stone-600 font-medium"><div className="w-1.5 h-1.5 bg-stone-800 rounded-full" />{f}</li>
             ))}
           </ul>
         </div>
         <div className="bg-stone-900 text-white p-12 rounded-[3rem] shadow-2xl">
           <p className="text-4xl font-serif italic text-stone-200 mb-2">{businessConfig.plans.autor.price}</p>
           <p className="text-sm text-stone-400 mb-10 italic">Entrega garantizada en {businessConfig.rules.autor.entrega}</p>
-          <button onClick={onCatalog} className="w-full bg-white text-stone-900 py-5 rounded-full text-[10px] font-bold uppercase tracking-widest">Explorar Catálogo</button>
+          <button onClick={onCatalog} className="w-full bg-white text-stone-900 py-5 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-stone-100 transition-all">Explorar Catálogo</button>
         </div>
       </div>
     </div>
@@ -194,21 +213,21 @@ const InfoAutorView = ({ onBack, onCatalog }) => (
 );
 
 const InfoPersonalizadoView = ({ onBack }) => (
-  <motion.div key="info-personalizado" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }} className="min-h-screen bg-white py-20 px-6">
+  <motion.div key="info-personalizado" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="min-h-screen bg-white py-20 px-6">
     <div className="max-w-4xl mx-auto text-stone-800">
-      <button onClick={onBack} className="mb-12 text-stone-400 text-[10px] font-bold uppercase tracking-widest">← Volver</button>
+      <button onClick={onBack} className="mb-12 text-stone-400 text-[10px] font-bold uppercase tracking-widest hover:text-stone-800 transition-colors">← Volver</button>
       <h1 className="text-5xl font-serif italic mb-6">Diseños Personalizados</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
         <div className="space-y-12">
           {businessConfig.rules.personalizado.pasos.map((p, i) => (
             <div key={i} className="flex gap-6">
               <span className="text-3xl font-serif italic text-stone-200">{i + 1}</span>
-              <div><h5 className="font-bold text-lg mb-1">{p.title}</h5><p className="text-sm text-stone-500">{p.desc}</p></div>
+              <div><h5 className="font-bold text-lg mb-1">{p.title}</h5><p className="text-sm text-stone-500 leading-snug">{p.desc}</p></div>
             </div>
           ))}
         </div>
         <div className="bg-[#F9F8F6] p-12 rounded-[4rem] h-fit sticky top-10 border border-stone-100 shadow-sm">
-          <p className="text-3xl font-serif italic mb-2">{businessConfig.plans.personalizado.price}</p>
+          <p className="text-3xl font-serif italic mb-2 text-stone-800">{businessConfig.plans.personalizado.price}</p>
           <p className="text-stone-500 text-sm mb-10">Tiempo: {businessConfig.rules.personalizado.entrega}</p>
           <a href={businessConfig.contact.formUrl} target="_blank" rel="noreferrer" className="block w-full bg-stone-900 text-white py-5 rounded-full text-center text-[10px] font-bold uppercase tracking-widest shadow-xl">Iniciar Proyecto</a>
         </div>
@@ -219,7 +238,7 @@ const InfoPersonalizadoView = ({ onBack }) => (
 
 const CatalogView = ({ onBack, onSelect }) => (
   <motion.div key="catalog" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="min-h-screen p-8 bg-[#F9F8F6]">
-    <button onClick={onBack} className="mb-12 text-stone-400 text-[10px] font-bold uppercase tracking-widest">← Volver</button>
+    <button onClick={onBack} className="mb-12 text-stone-400 text-[10px] font-bold uppercase tracking-widest hover:text-stone-800 transition-colors">← Volver</button>
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
       {Object.keys(themeConfig).map((t) => (
         <div key={t} onClick={() => onSelect(t)} className="cursor-pointer bg-white p-10 rounded-[2.5rem] shadow-sm hover:shadow-2xl transition-all flex flex-col items-center group">
@@ -243,41 +262,6 @@ const EnvelopeView = ({ theme, eventName, guestName, onStart, onBack }) => (
       {!invitationConfig.isProduction && <button onClick={onBack} className="mt-8 text-stone-400 text-[9px] uppercase tracking-widest">Regresar al catálogo</button>}
     </div>
   </motion.div>
-);
-
-const InvitationView = ({ theme, currentTheme, guestInfo, isPremium, onBack, audioRef, whatsappSelectionLink }) => (
-  <div className="w-full flex flex-col items-center">
-    {!invitationConfig.isProduction && (
-      <div className="fixed top-6 left-6 z-[100] flex gap-3">
-        {/* Botón de Volver */}
-        <button onClick={onBack} className="bg-white/90 backdrop-blur-md px-5 py-2 rounded-full text-[10px] font-bold shadow-lg border border-stone-100 uppercase tracking-widest">
-          ← Catálogo
-        </button>
-        {/* Botón de Elegir diseño (WhatsApp) restaurado */}
-        <a 
-          href={whatsappSelectionLink} 
-          target="_blank" 
-          rel="noreferrer"
-          className="bg-stone-800 text-white px-6 py-2 rounded-full text-[10px] font-bold shadow-lg uppercase tracking-widest hover:bg-stone-700 transition-colors"
-        >
-          Elegir este diseño
-        </a>
-      </div>
-    )}
-    <div className={`w-full md:max-w-4xl mx-auto shadow-2xl relative z-10 ${theme.card} md:my-10 overflow-hidden`}>
-      <Hero theme={theme} />
-      <div className="w-full px-6 md:px-12 flex flex-col items-center space-y-24 py-24">
-        <Countdown targetDate={invitationConfig.event.date} theme={theme} />
-        <Location theme={theme} locations={invitationConfig.locations} />
-        <Gallery theme={theme} />
-        <PhotoCarousel theme={theme} />
-        <RSVPForm theme={theme} pases={isPremium ? guestInfo.pases : null} guestName={isPremium ? guestInfo.name : null} />
-      </div>
-      <Footer theme={theme} />
-    </div>
-    <MusicPlayer theme={theme} audioRef={audioRef} />
-    <VisualEffects themeId={currentTheme} />
-  </div>
 );
 
 export default App;
