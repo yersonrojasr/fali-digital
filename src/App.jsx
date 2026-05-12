@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, Gift, CheckCircle, MapPin, Clock, Users } from 'lucide-react';
+import { Calendar, Gift, CheckCircle, MapPin, Clock, Users, MessageCircle } from 'lucide-react';
 
 // --- CONFIGURACIONES ---
 import { invitationConfig } from './config/invitationConfig';
@@ -17,6 +17,7 @@ import RSVPForm from './components/RSVPForm';
 import PhotoCarousel from './components/PhotoCarousel';
 import Footer from './components/Footer';
 import VisualEffects from './components/VisualEffects';
+import ContactSection from './components/ContactSection';
 
 const THEME_ICONS = {
   safari: '🦁', pastel: '🌸', minimalista: '✨', boho: '🌿', 
@@ -110,7 +111,7 @@ function App() {
   );
 }
 
-// --- VISTA DE LA INVITACIÓN (ORDEN CORREGIDO) ---
+// --- VISTA DE LA INVITACIÓN ---
 const InvitationView = ({ theme, currentTheme, guestInfo, isPremium, onBack, audioRef, whatsappSelectionLink }) => {
   const cleanMainCard = useMemo(() => theme.card
     .replace(/\bp-\d+\b/g, 'p-0')
@@ -138,10 +139,8 @@ const InvitationView = ({ theme, currentTheme, guestInfo, isPremium, onBack, aud
           
           <PhotoCarousel theme={theme} />
           
-          {/* 1. Confirmación de Asistencia Primero */}
           <RSVPForm theme={theme} pases={isPremium ? guestInfo.pases : null} guestName={isPremium ? guestInfo.name : null} />
           
-          {/* 2. Agendar Evento Después */}
           <div className={`w-full max-w-2xl mx-auto text-center ${theme.card.replace(/\bp-\d+\b/g, 'p-8 md:p-12')} shadow-sm`}>
             <Calendar className={`${theme.accent} mx-auto mb-6 opacity-30`} size={48} strokeWidth={1} />
             <h2 className={`${theme.title} text-2xl mb-4`}>{invitationConfig.event.calendarTitle}</h2>
@@ -151,7 +150,6 @@ const InvitationView = ({ theme, currentTheme, guestInfo, isPremium, onBack, aud
             </a>
           </div>
 
-          {/* 3. Lista de Regalos al Final */}
           <div className={`w-full max-w-2xl mx-auto text-center ${theme.card.replace(/\bp-\d+\b/g, 'p-8 md:p-12')} shadow-sm`}>
             <Gift className={`${theme.accent} mx-auto mb-6 opacity-30`} size={48} strokeWidth={1} />
             <h2 className={`${theme.title} text-2xl mb-4`}>{invitationConfig.event.giftTitle}</h2>
@@ -163,7 +161,7 @@ const InvitationView = ({ theme, currentTheme, guestInfo, isPremium, onBack, aud
             </a>
           </div>
         </div>
-        
+
         <Footer theme={theme} />
       </div>
       <MusicPlayer theme={theme} audioRef={audioRef} />
@@ -172,16 +170,16 @@ const InvitationView = ({ theme, currentTheme, guestInfo, isPremium, onBack, aud
   );
 };
 
-// --- VISTA INFO AUTOR (RESTAURADA COMPLETA) ---
+// --- VISTA INFO AUTOR ---
 const InfoAutorView = ({ onBack, onCatalog }) => (
-  <motion.div key="info-autor" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="min-h-screen bg-white py-20 px-6">
+  <motion.div key="info-autor" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="min-h-screen bg-white py-20 px-6 text-center md:text-left">
     <div className="max-w-4xl mx-auto text-stone-800">
       <button onClick={onBack} className="mb-12 text-stone-400 text-[10px] font-bold uppercase tracking-widest hover:text-stone-800 transition-colors">← Volver</button>
       
       <header className="mb-12">
-        <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-stone-400 block mb-4">Autor Collection</span>
+        <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-stone-400 block mb-4 text-center md:text-left">Autor Collection</span>
         <h1 className="text-5xl font-serif italic mb-6">Elegancia Inmediata</h1>
-        <p className="text-lg text-stone-500 leading-relaxed max-w-2xl">{businessConfig.rules.autor.descripcion}</p>
+        <p className="text-lg text-stone-500 leading-relaxed max-w-2xl mx-auto md:mx-0">{businessConfig.rules.autor.descripcion}</p>
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
@@ -195,7 +193,7 @@ const InfoAutorView = ({ onBack, onCatalog }) => (
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start mb-20">
         <div className="space-y-8">
-          <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-stone-400 border-b pb-2">Experiencia Interactiva</h3>
+          <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-stone-400 border-b pb-2 text-left">Experiencia Interactiva</h3>
           <div className="grid grid-cols-1 gap-4 text-left">
             {businessConfig.rules.autor.features.map((f, i) => (
               <div key={i} className="flex items-center gap-3 text-stone-600">
@@ -215,20 +213,24 @@ const InfoAutorView = ({ onBack, onCatalog }) => (
           <button onClick={onCatalog} className="w-full bg-white text-stone-900 py-5 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-stone-100 transition-all">Explorar Catálogo</button>
         </div>
       </div>
+      <ContactSection />
+      <Footer theme={{ title: 'font-serif', container: 'bg-white', accent: 'text-stone-800', button: 'bg-stone-800 text-white' }} />
     </div>
   </motion.div>
 );
 
-// --- COMPONENTES RESTANTES (LANDING, PERSONALIZADOS, CATALOGO, SOBRE) ---
+// --- VISTA LANDING ---
 const LandingView = ({ setViewMode }) => (
   <motion.div key="home" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="min-h-screen flex flex-col items-center justify-center p-8 bg-[#F9F8F6]">
     <div className="max-w-5xl w-full flex flex-col items-center text-center">
       <img src="/logosinfondo.png" alt="Logo" className="w-64 md:w-80 mb-6" />
       <p className="text-[10px] uppercase tracking-[0.6em] text-stone-400 mb-20 font-medium italic">The Art of Virtual Hosting</p>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-stretch w-full max-w-4xl text-stone-800 text-left">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-stretch w-full max-w-4xl text-stone-800 text-left mb-20">
         <LandingCard title="Diseños de Autor" tag="Colección 01" desc="Curaduría de estilos listos para personalizar." onClick={() => setViewMode('info-autor')} />
         <LandingCard title="Personalizados" tag="Colección 02" desc="Diseños únicos desde lienzo en blanco." onClick={() => setViewMode('info-personalizado')} dark />
       </div>
+      <ContactSection />
+      <Footer theme={{ title: 'font-serif', container: 'bg-[#F9F8F6]', accent: 'text-stone-800', button: 'bg-stone-800 text-white' }} />
     </div>
   </motion.div>
 );
@@ -246,16 +248,17 @@ const LandingCard = ({ title, tag, desc, onClick, dark }) => (
   </div>
 );
 
+// --- VISTA INFO PERSONALIZADO ---
 const InfoPersonalizadoView = ({ onBack }) => (
   <motion.div key="info-personalizado" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="min-h-screen bg-white py-20 px-8">
     <div className="max-w-4xl mx-auto text-stone-800">
       <button onClick={onBack} className="mb-12 text-stone-400 text-[10px] font-bold uppercase tracking-widest hover:text-stone-800 transition-colors">← Volver</button>
       <header className="mb-16">
         <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-stone-400 block mb-4">Bespoke Service</span>
-        <h1 className="text-5xl md:text-6xl font-serif italic mb-6 text-stone-800">Diseños Personalizados</h1>
-        <p className="text-xl text-stone-500 leading-relaxed max-w-2xl">{businessConfig.rules.personalizado.descripcion}</p>
+        <h1 className="text-5xl md:text-6xl font-serif italic mb-6 text-stone-800 text-center md:text-left">Diseños Personalizados</h1>
+        <p className="text-xl text-stone-500 leading-relaxed max-w-2xl text-center md:text-left">{businessConfig.rules.personalizado.descripcion}</p>
       </header>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-16 mb-20">
         <div className="space-y-12">
           {businessConfig.rules.personalizado.pasos.map((p, i) => (
             <div key={i} className="flex gap-6">
@@ -270,6 +273,8 @@ const InfoPersonalizadoView = ({ onBack }) => (
           <a href={businessConfig.contact.formUrl} target="_blank" rel="noreferrer" className="block w-full bg-stone-900 text-white py-5 rounded-full text-[10px] font-bold uppercase tracking-widest">Iniciar Proyecto</a>
         </div>
       </div>
+      <ContactSection />
+      <Footer theme={{ title: 'font-serif', container: 'bg-white', accent: 'text-stone-800', button: 'bg-stone-800 text-white' }} />
     </div>
   </motion.div>
 );

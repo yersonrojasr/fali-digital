@@ -2,7 +2,7 @@
 export const businessConfig = {
   contact: {
     whatsapp: "+50683162053", 
-    formUrl: "https://docs.google.com/forms/...",
+    formUrl: "https://docs.google.com/forms/d/e/1FAIpQLSd3F1JCgA1FiaWgZ4jEm_I2KzB8_oB0DvuZBs9c7AP8MNSoQA/viewform?usp=dialog",
   },
   plans: {
     autor: { price: "Inversión: $35" },
