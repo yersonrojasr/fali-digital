@@ -25,7 +25,7 @@ const RSVPForm = ({ theme, pases, guestName }) => {
     const pasesMessage = showPasesLogic ? `%0A*Lugares a usar:* ${formData.pasesConfirmados} de ${pases}` : '';
     const extraMessage = formData.message ? `%0A*Nota:* ${formData.message}` : '';
 
-    const finalUrl = `https://wa.me/${theme.whatsappNumber || '50683162053'}?text=${baseMessage}${pasesMessage}${extraMessage}`;
+    const finalUrl = `https://wa.me/${theme.whatsappNumber || '50685771749'}?text=${baseMessage}${pasesMessage}${extraMessage}`;
     window.open(finalUrl, '_blank');
     setIsSent(true);
   };

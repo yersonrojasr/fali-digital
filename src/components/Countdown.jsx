@@ -48,6 +48,11 @@ const Countdown = ({ targetDate, theme }) => {
         </motion.div>
       )}
 
+      {/* --- PALABRA ENCABEZADO --- */}
+      <p className={`${theme?.title || ''} text-lg md:text-xl uppercase tracking-[0.2em] opacity-60 text-center mb-6`}>
+        Faltan
+      </p>
+
       {/* --- CONTADOR --- */}
       <div className={`grid grid-cols-4 gap-4 md:gap-8 p-6 md:p-10 rounded-[2rem] bg-white shadow-sm border border-stone-50 w-full max-w-2xl`}>
         {Object.entries(timeLeft).map(([label, value]) => (

@@ -12,9 +12,11 @@ const PhotoCarousel = ({ theme }) => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const fotos = [
-    "/gallery/foto1.jpg",
-    "/gallery/foto2.jpg",
-    "/gallery/foto3.jpg", 
+    "/Julieta/gallery/foto1.jpg",
+    "/Julieta/gallery/foto2.jpg",
+    "/Julieta/gallery/foto3.jpg", 
+    "/Julieta/gallery/foto4.jpg",
+    "/Julieta/gallery/foto5.jpg",
   ];
 
   return (

@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 const Hero = ({ theme, config }) => {
   // En el nivel Senior, usamos la carpeta 'public' para imágenes dinámicas
-  const imageSrc = config.images?.hero ? `/${config.images.hero}` : '/Olivia.PNG';
+  const imageSrc = config.images?.hero ? `/${config.images.hero}` : '/Julieta/Portada.JPG';
 
   return (
     <section className="relative w-full h-screen overflow-hidden flex items-center justify-center bg-stone-900">
