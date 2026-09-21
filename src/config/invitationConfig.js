@@ -40,7 +40,7 @@ export const invitationConfig = {
   ],
 
   images: {
-    hero: "Olivia.PNG",
+    hero: "globos.JPG",
     paleta: "Paleta.JPG",
     flores: "flores-paleta.PNG", 
   },
