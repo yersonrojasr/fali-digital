@@ -210,8 +210,8 @@ function App() {
               <div className="w-full flex flex-col items-center py-10 md:py-24 space-y-32">
                 <div className="w-full max-w-4xl px-6 flex flex-col items-center"><Countdown targetDate={invitationConfig.event?.date} theme={theme} /></div>
                 <div className="w-full max-w-[1400px] mx-auto px-4"><Location theme={theme} locations={invitationConfig.locations || []} /></div>
-                <div className="w-full max-w-[1600px] mx-auto px-4 space-y-32"><Gallery theme={theme} /><PhotoCarousel theme={theme} /></div>
-                
+                <div className="w-full max-w-[1600px] mx-auto px-4 space-y-32"><Gallery theme={theme} />{/* <PhotoCarousel theme={theme} /> */}</div>
+
                 <div className="w-full max-w-4xl px-6 space-y-32">
                   <RSVPForm theme={theme} pases={isPremium ? guestInfo.pases : null} guestName={isPremium ? guestInfo.name : null} />
                   
@@ -230,10 +230,10 @@ function App() {
                     <Gift className={`${theme?.accent} mx-auto mb-6 opacity-30`} size={48} strokeWidth={1} />
                     <h2 className={`${theme?.title} text-3xl mb-6`}>{invitationConfig.event?.giftTitle}</h2>
                     <p className="text-base opacity-70 mb-4 max-w-md mx-auto leading-relaxed">
-                        Debido a que ya tenemos muchos de los artículos necesarios, esta lista es una sugerencia para que todas las muestras de cariño sean aprovechadas.
+                      Tu presencia es nuestro mejor regalo. Si deseas hacerme un obsequio, contaremos con lluvia de sobres el día del evento, o si lo prefieres, puedes realizarlo por medio de SINPE Móvil.
                     </p>
-                    <p className="text-sm opacity-60 mb-10 italic">No es obligatorio llevar algo de la lista.</p>
-                    <a href={invitationConfig.event?.giftListLink} target="_blank" rel="noreferrer" className={`inline-block w-full md:w-auto md:px-12 py-5 rounded-full text-[10px] font-bold uppercase tracking-[0.3em] shadow-xl ${theme?.button}`}>🎁 Ver sugerencias</a>
+                    <p className="text-sm opacity-60 mb-10 italic">SINPE Móvil 7007-2297</p>
+                    {/*<a href={invitationConfig.event?.giftListLink} target="_blank" rel="noreferrer" className={`inline-block w-full md:w-auto md:px-12 py-5 rounded-full text-[10px] font-bold uppercase tracking-[0.3em] shadow-xl ${theme?.button}`}>🎁 Ver sugerencias</a>*/}
                   </div>
                 </div>
               </div>

@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-// 1. IMPORTAMOS LAS IMÁGENES DIRECTAMENTE (El "Seguro de Vida")
 import imgPaleta from '../assets/Paleta.JPG'; 
 import imgFlores from '../assets/flores-paleta.JPG'; 
 
@@ -17,31 +16,32 @@ const Gallery = ({ theme }) => {
       </motion.h3>
 
       <div className="flex flex-col sm:flex-row justify-center items-center gap-8">
+        {/* Tarjeta 1: Estilo de Traje */}
         <motion.div
           initial={{ opacity: 0, x: -100 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 1, type: "spring", bounce: 0.4 }}
+          className="w-64 p-6 rounded-2xl shadow-xl border-4 border-white bg-white/50 backdrop-blur-sm text-center"
         >
-          {/* 2. USAMOS LA VARIABLE IMPORTADA, NO LA RUTA DE TEXTO */}
-          <img 
-            src={imgPaleta} 
-            alt="Paleta de Colores" 
-            className="w-48 h-auto rounded-2xl shadow-xl border-4 border-white" 
-          />
+          <h4 className="font-serif text-lg font-bold mb-2 opacity-90">Vestimenta</h4>
+          <p className="text-sm opacity-80 leading-relaxed">
+            Te sugerimos asistir con vestimenta <strong className="font-semibold">Semiformal o formal</strong>.
+          </p>
         </motion.div>
 
+        {/* Tarjeta 2: Nota o Reservas */}
         <motion.div
           initial={{ opacity: 0, x: 100 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 1, type: "spring", bounce: 0.4, delay: 0.2 }}
+          className="w-64 p-6 rounded-2xl shadow-xl border-4 border-white bg-white/50 backdrop-blur-sm text-center"
         >
-          <img 
-            src={imgFlores} 
-            alt="Detalles" 
-            className="w-48 h-auto rounded-2xl shadow-xl border-4 border-white" 
-          />
+          <h4 className="font-serif text-lg font-bold mb-2 opacity-90">Detalle</h4>
+          <p className="text-sm opacity-80 leading-relaxed italic">
+            Agradecemos reservar el color celeste para <strong className="font-semibold">Danna</strong>.
+          </p>
         </motion.div>
       </div>
     </section>
