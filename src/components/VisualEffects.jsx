@@ -41,7 +41,7 @@ const VisualEffects = React.memo(({ themeId }) => {
   }
 
   // RENDER: CONFETI (Birthday)
-  if (id === 'birthday') {
+  if (id === 'birthday' || id === 'vintage') {
     return (
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-40">
         {effectData.confettiItems.map((_, i) => (
